@@ -11,7 +11,7 @@ public class Igra {
         Monster monster1 = new Monster();
         Monster monster2 = new Monster();
         Monster winner = new Monster();
-        Fight F = new Fight();
+        Fight fight = new Fight();
         
      
         System.out.println("Enter name of the monster1: \n");
@@ -69,7 +69,7 @@ public class Igra {
         System.out.printf("Speed: %d\n", monster2.speed);
         System.out.printf("Amount: %d\n", monster2.amount);
         
-        winner = F.fightRound(monster1, monster2);
+        winner = fight.fightRound(monster1, monster2);
         
         System.out.printf("The winner is %s\n", winner.name);
         System.out.printf("Hit points left: %d", winner.hp);
