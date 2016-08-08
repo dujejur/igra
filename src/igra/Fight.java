@@ -11,114 +11,74 @@ public class Fight {
         Monster defender = new Monster();
         
             //Faster monster is attacker
-            if(monster1.speed >= monster2.speed){
+            if(monster1.speed > monster2.speed){
                 attacker = monster1;
                 defender = monster2;
-            
             } else {
                 attacker = monster2;
                 defender = monster1;
             }
             
         //Checking if any of monsters is dead
-        while((defender.hp >= 0) && (attacker.hp >= 0))
-        {    
-            if(attacker.attack > defender.defence){
+        while((defender.amount > 0) && (attacker.amount > 0)){                
+                
+            int temp;
+            int damageRand;
+            int lowDamageA;
+            int lowDamageD;
+            int highDamageD;
+            int highDamageA;
+            int damageBonus;
+            int damageFinal;
+            Random random = new Random();
             
-                int temp;
-                int damageRand;
-                Random random = new Random();
-                int lowDamage = attacker.damageL;
-                int highDamage = attacker.damageH;
-                damageRand = randomDamage(lowDamage, highDamage, random);
-                
-                temp = attacker.attack - defender.defence;
-                int damagePlus = ((temp * damageRand)/40)+1;
-                int damageFinal = damageRand + damagePlus;
-                int damageFinal2 = damageFinal * attacker.amount;
-                defender = amountCount(damageFinal2, defender);
+            lowDamageA = attacker.damageL;
+            highDamageA = attacker.damageH;
+            
+            damageRand = randomDamage(lowDamageA, highDamageA, random);
 
-                
+            temp = attacker.attack - defender.defence;
+            damageBonus = ((temp * damageRand)/40)+1;
+            damageFinal = (damageRand + damageBonus) * attacker.amount -1;
+            defender = amountCount(damageFinal, defender);
+     
                 //if defender survived
-                if(defender.hp > 0) {
-                    
-                    if (defender.attack > attacker.defence){
-                        
-                        lowDamage = defender.damageL;
-                        highDamage = defender.damageH;
-                        damageRand = randomDamage(lowDamage, highDamage, random);
-                
-                        temp = defender.attack - attacker.defence;
-                        damagePlus = ((temp * damageRand)/40)+1;
-                        damageFinal = damageRand - damagePlus;
-                        damageFinal2 = damageFinal * defender.amount;
-                        attacker = amountCount(damageFinal2, attacker);
+            if(defender.amount > 0) {
 
-                    }else{
-                        
-                        lowDamage = defender.damageL;
-                        highDamage = defender.damageH;
-                        damageRand = randomDamage(lowDamage, highDamage, random);
-                        
-                        temp = attacker.defence - defender.attack;
-                        int damageMinus = ((temp * damageRand)/40)+1;
-                        damageFinal = damageRand - damageMinus;
-                        damageFinal2 = damageFinal * defender.amount;
-                        attacker = amountCount(damageFinal2, attacker);
-                    }
-                }
-                else
-                    break;
-             
-            }else{
-            
-                int temp;
-                int damageRand;
-                int lowDamage = attacker.damageL;
-                int highDamage = attacker.damageH;
-                Random random = new Random();
-                Random generator = new Random();
+                lowDamageD = defender.damageL;
+                highDamageD = defender.damageH;
+                int i = 2;
                 
-                damageRand = randomDamage(lowDamage, highDamage, random);
-            
-                temp = defender.defence - attacker.attack;
-                int damageMinus = ((temp * damageRand)/40)+1;
-                int damageFinal = damageRand - damageMinus;
-                int damageFinal2 = damageFinal * attacker.amount;
-                defender = amountCount(damageFinal2, defender);
+                while(i > 0){
                 
-                if(defender.hp > 0){
+                    damageRand = randomDamage(lowDamageD, highDamageD, random);
+
+                    temp = defender.attack - attacker.defence;
+                    damageBonus = ((temp * damageRand)/40)+1;
+                    damageFinal = ((damageRand + damageBonus) * defender.amount -1)/i;
+                    attacker = amountCount(damageFinal, attacker);
                     
-                    if (defender.attack > attacker.defence){
-                
-                        lowDamage = defender.damageL;
-                        highDamage = defender.damageH;
-                        damageRand = randomDamage(lowDamage, highDamage, random);
-                        temp = defender.attack - attacker.defence;
-                        
-                        int damagePlus = ((temp * damageRand)/40)+1;
-                        damageFinal = damageRand - damagePlus;
-                        damageFinal2 = damageFinal * defender.amount;
-                        attacker = amountCount(damageFinal2, attacker);
-                    }else{
-                       
-                        lowDamage = defender.damageL;
-                        highDamage = defender.damageH;
-                        temp = attacker.defence - defender.attack;
-                        damageRand = randomDamage(lowDamage, highDamage, random);
-                       
-                        damageMinus = ((temp * damageRand)/40)+1;
-                        damageFinal = damageRand - damageMinus;
-                        damageFinal2 = damageFinal * defender.amount;
-                        attacker = amountCount(damageFinal2, attacker);
-                    }
+                    i--;
                 }
-                else
-                    break;                  
             }
+            else
+                break;
+            
+            if(attacker.amount > 0){
+            
+                damageRand = randomDamage(lowDamageA, highDamageA, random);
+
+                temp = attacker.attack - defender.defence;
+                damageBonus = ((temp * damageRand)/40)+1;
+                damageFinal = ((damageRand + damageBonus) * attacker.amount -1)/2;
+                defender = amountCount(damageFinal, defender);
+            }
+            else
+                break;
+                             
         } 
         
-        if(attacker.hp <= 0)
+        if(attacker.amount <= 0)
             return defender;
         else
             return attacker;
@@ -148,10 +108,10 @@ public class Fight {
             defenderHpAmount = defender.hp * defender.amount;
             attackerDamageAmount = attackerDamage;
             amountResult = defenderHpAmount - attackerDamageAmount;
-            result = amountResult / defender.amount;
-            hpLeft = amountResult % defender.amount;
-            defender.amount = defender.amount - result;
-            defender.hp = defender.hp - hpLeft;
+            result = amountResult / defender.hp;
+            hpLeft = amountResult % defender.hp;
+            defender.amount = result;
+            defender.hp = hpLeft;
 
             return defender;
     }
