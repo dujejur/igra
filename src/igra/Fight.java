@@ -36,7 +36,8 @@ public class Fight {
                 int damagePlus = ((temp * damageRand)/40)+1;
                 int damageFinal = damageRand + damagePlus;
                 int damageFinal2 = damageFinal * attacker.amount;
-                defender.hp = defender.hp - damageFinal2;
+                defender = amountCount(damageFinal2, defender);
+
                 
                 //if defender survived
                 if(defender.hp > 0) {
@@ -51,7 +52,8 @@ public class Fight {
                         damagePlus = ((temp * damageRand)/40)+1;
                         damageFinal = damageRand - damagePlus;
                         damageFinal2 = damageFinal * defender.amount;
-                        attacker.hp = attacker.hp - damageFinal2;
+                        attacker = amountCount(damageFinal2, attacker);
+
                     }else{
                         
                         lowDamage = defender.damageL;
@@ -62,7 +64,7 @@ public class Fight {
                         int damageMinus = ((temp * damageRand)/40)+1;
                         damageFinal = damageRand - damageMinus;
                         damageFinal2 = damageFinal * defender.amount;
-                        attacker.hp = attacker.hp - damageFinal2;
+                        attacker = amountCount(damageFinal2, attacker);
                     }
                 }
                 else
@@ -83,7 +85,7 @@ public class Fight {
                 int damageMinus = ((temp * damageRand)/40)+1;
                 int damageFinal = damageRand - damageMinus;
                 int damageFinal2 = damageFinal * attacker.amount;
-                defender.hp = defender.hp - damageFinal2;
+                defender = amountCount(damageFinal2, defender);
                 
                 if(defender.hp > 0){
                     
@@ -97,7 +99,7 @@ public class Fight {
                         int damagePlus = ((temp * damageRand)/40)+1;
                         damageFinal = damageRand - damagePlus;
                         damageFinal2 = damageFinal * defender.amount;
-                        attacker.hp = attacker.hp - damageFinal2;
+                        attacker = amountCount(damageFinal2, attacker);
                     }else{
                        
                         lowDamage = defender.damageL;
@@ -108,7 +110,7 @@ public class Fight {
                         damageMinus = ((temp * damageRand)/40)+1;
                         damageFinal = damageRand - damageMinus;
                         damageFinal2 = damageFinal * defender.amount;
-                        attacker.hp = attacker.hp - damageFinal2;
+                        attacker = amountCount(damageFinal2, attacker);
                     }
                 }
                 else
@@ -121,17 +123,36 @@ public class Fight {
         else
             return attacker;
     }    
-
-    private static int randomDamage(int aStart, int aEnd, Random aRandom){
     
-    if (aStart > aEnd) {
-        throw new IllegalArgumentException("Start cannot exceed End.");
+        private static int randomDamage(int aStart, int aEnd, Random aRandom){
+
+            if (aStart > aEnd) {
+                throw new IllegalArgumentException("Start cannot exceed End.");
+            }
+
+            long range = (long)aEnd - (long)aStart + 1;
+            long fraction = (long)(range * aRandom.nextDouble());
+            int randomNumber =  (int)(fraction + aStart);
+
+            return randomNumber;
+       }
+    
+        private Monster amountCount(int attackerDamage, Monster defender){
+
+            int defenderHpAmount;
+            int attackerDamageAmount;
+            int amountResult;
+            int result;
+            int hpLeft;
+
+            defenderHpAmount = defender.hp * defender.amount;
+            attackerDamageAmount = attackerDamage;
+            amountResult = defenderHpAmount - attackerDamageAmount;
+            result = amountResult / defender.amount;
+            hpLeft = amountResult % defender.amount;
+            defender.amount = defender.amount - result;
+            defender.hp = defender.hp - hpLeft;
+
+            return defender;
     }
-
-    long range = (long)aEnd - (long)aStart + 1;
-    long fraction = (long)(range * aRandom.nextDouble());
-    int randomNumber =  (int)(fraction + aStart);
-
-    return randomNumber;
-  }
 }
