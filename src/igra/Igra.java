@@ -1,11 +1,12 @@
 
 package igra;
-
 import java.util.Scanner;
+import java.sql.*;
 
 public class Igra {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        
         
         int temp;
         Scanner input = new Scanner(System.in);
@@ -13,6 +14,10 @@ public class Igra {
         Monster monster2 = new Monster();
         Monster winner = new Monster();
         Fight fight = new Fight();
+        DataAccessLayer connect = new DataAccessLayer("root", "Split321");
+        ResultSet result = connect.ExecuteQuery("select * from monster");
+        
+       
         
      
         System.out.println("Enter name of the monster1: \n");

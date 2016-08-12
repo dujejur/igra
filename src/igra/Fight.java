@@ -3,6 +3,7 @@ package igra;
 
 import java.util.Random;
 
+
 public class Fight {
     
     public Monster fightRound(Monster monster1, Monster monster2){
@@ -18,7 +19,6 @@ public class Fight {
                 attacker = monster2;
                 defender = monster1;
             }
-            
         //Checking if any of monsters is dead
         while((defender.amount > 0) && (attacker.amount > 0)){                
                 
@@ -75,7 +75,7 @@ public class Fight {
             }
             else
                 break;
-                             
+                          
         } 
         
         if(attacker.amount <= 0)
